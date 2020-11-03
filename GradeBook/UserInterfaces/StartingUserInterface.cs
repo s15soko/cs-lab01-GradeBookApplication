@@ -1,5 +1,7 @@
-﻿using GradeBook.GradeBooks;
+﻿using GradeBook.Enums;
+using GradeBook.GradeBooks;
 using System;
+using System.Security.Cryptography;
 
 namespace GradeBook.UserInterfaces
 {
@@ -40,9 +42,26 @@ namespace GradeBook.UserInterfaces
                 return;
             }
             var name = parts[1];
-            BaseGradeBook gradeBook = new BaseGradeBook(name);
+            var type = parts[2];
+
+            if(type == "standard")
+            {
+                StandardGradeBook standardGradeBook = new StandardGradeBook(name);
+                GradeBookUserInterface.CommandLoop(standardGradeBook);
+            }
+            else if (type == "ranked")
+            {
+                RankedGradeBook rankedGradeBook = new RankedGradeBook(name);
+                GradeBookUserInterface.CommandLoop(rankedGradeBook);
+            }
+            else
+            {
+                Console.WriteLine("{0} is not a supported type of gradebook, please try again", type);
+                return;
+            }
+
+
             Console.WriteLine("Created gradebook {0}.", name);
-            GradeBookUserInterface.CommandLoop(gradeBook);
         }
 
         public static void LoadCommand(string command)
